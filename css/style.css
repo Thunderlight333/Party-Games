@@ -223,3 +223,44 @@ option { background: #151832; color: var(--text); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ===== العميل السري ===== */
+.cn-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; margin-bottom: 10px; flex-wrap: wrap; }
+.cn-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: 999px; border: 1px solid var(--tc); background: var(--glass-2); font-weight: 600; opacity: .7; }
+.cn-chip.on { opacity: 1; box-shadow: 0 0 0 2px var(--tc); }
+.cn-chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--tc); }
+.cn-chip b { font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.cn-chip small { color: var(--muted); }
+.cn-turn { text-align: center; font-size: 1.15rem; margin-bottom: 8px; }
+.cn-turn b { color: var(--tc); }
+.cn-bar { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.cn-clue { display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-color: var(--tc); flex-wrap: wrap; justify-content: center; }
+.cn-clue b { font-size: 1.5rem; color: var(--tc); }
+.cn-clue-in { display: grid; gap: 8px; padding: 10px 14px; width: min(560px, 100%); }
+.cn-clue-in .input { flex: 1; min-width: 0; }
+.cn-num { min-width: 28px; text-align: center; font-size: 1.3rem; }
+.cn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 980px; margin: 0 auto 10px; }
+.cn-card {
+  position: relative; min-height: clamp(54px, 11vw, 96px); padding: 6px; border-radius: 14px; cursor: pointer; font: inherit; font-weight: 700;
+  font-size: clamp(.8rem, 2.4vw, 1.25rem); color: var(--text); line-height: 1.3; word-break: break-word;
+  background: linear-gradient(160deg, #f5ecd7, #d9cba6); color: #2a2418; border: 2px solid rgba(255,255,255,.25);
+  box-shadow: 0 6px 0 rgba(0,0,0,.35); transition: transform .15s var(--ease), background .35s, box-shadow .2s;
+}
+.cn-card:hover { transform: translateY(-2px); }
+.cn-card.pick { box-shadow: 0 0 0 3px var(--accent-2), 0 6px 0 rgba(0,0,0,.35); animation: cnPick .7s ease-in-out infinite alternate; }
+@keyframes cnPick { to { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-2) 45%, transparent), 0 6px 0 rgba(0,0,0,.35); } }
+.cn-card.open, .cn-card.ghost { background: var(--cc); color: var(--ct); cursor: default; animation: hxIn .35s var(--ease); }
+.cn-card.ghost { opacity: .45; }
+.cn-card.killer { border-color: var(--danger); }
+.cn-card.open:hover { transform: none; }
+.cn-note { text-align: center; margin: 0 0 12px; }
+.cn-sub { text-align: center; margin: 14px 0 10px; font-size: 1.05rem; color: var(--muted); }
+.cn-key { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.cn-kc { min-height: 52px; display: grid; place-items: center; text-align: center; border-radius: 10px; font-size: .78rem; font-weight: 700; padding: 4px; word-break: break-word; }
+.cn-kc.done { opacity: .35; text-decoration: line-through; }
+.cn-legend { text-align: center; margin-top: 10px; }
+.cn-log { margin-top: 16px; padding: 10px 16px; }
+.cn-log summary { cursor: pointer; font-weight: 600; }
+.cn-log ol { margin: 8px 0 0; padding-inline-start: 20px; color: var(--muted); font-size: .9rem; }
+@keyframes hxIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) { .cn-grid { gap: 5px; } .cn-card { border-radius: 10px; padding: 3px; box-shadow: 0 4px 0 rgba(0,0,0,.35); } }
