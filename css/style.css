@@ -256,6 +256,7 @@ option { background: #151832; color: var(--text); }
 .hx-q { display: grid; gap: 14px; justify-items: center; text-align: center; }
 .hx-big { width: 84px; height: 97px; display: grid; place-items: center; font-size: 2.6rem; font-weight: 800;
   background: var(--fill, linear-gradient(160deg, var(--accent), var(--accent-2))); color: var(--fg, #fff); transition: background .3s; }
+.hx-cat { font-size: .8rem; padding: 2px 12px; border-radius: 999px; background: var(--glass-2); border: 1px solid var(--brd-2); color: var(--muted); margin-bottom: -6px; }
 .hx-qtext { font-size: clamp(1.15rem, 2.8vw, 1.7rem); font-weight: 600; line-height: 1.7; max-width: 34ch; }
 .hx-ans b { display: block; font-size: 1.45rem; color: var(--accent-2); animation: hxIn .35s var(--ease); }
 .hx-tools { justify-content: center; }

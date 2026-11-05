@@ -5,6 +5,9 @@
   const DATA = (window.PG_DATA && window.PG_DATA.huroof) || {};
   const LETTERS = ['أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'];
   const KEEP = '__keep';
+  const CATS = { 'دين': 'دين إسلامي', 'لغة': 'لغة عربية', 'تاريخ': 'تاريخ', 'جغرافيا': 'جغرافيا', 'سياسة': 'سياسة', 'رياضة': 'رياضة',
+    'كرتون': 'كرتون وأنمي', 'علوم': 'علوم', 'أكل': 'أكل ومطبخ', 'أدب': 'أدب وشعر', 'تقنية': 'تقنية', 'عام': 'عام' };
+  const catOf = (q) => (q && q[2]) || 'عام';
   const show = (l) => (l === 'ه' ? 'هـ' : l);
   const qs = (l) => DATA[l] || [];
   const bankId = (l) => 'huroof:' + l;
@@ -19,7 +22,7 @@
       { key: 'autoTimer', label: 'تشغيل المؤقت تلقائياً عند فتح السؤال', type: 'toggle', default: true },
       { key: 'size', label: 'حجم الشبكة', type: 'select', default: '25', hint: 'يُطبَّق عند إعادة التوزيع',
         options: [{ value: '25', label: '25 حرفاً (5×5)' }, { value: '28', label: 'كل الحروف (28)' }] },
-    ],
+    ].concat(Object.keys(CATS).map((c) => ({ key: 'cat_' + c, label: 'مجال: ' + CATS[c], type: 'toggle', default: true }))),
     newSession(ctx) { return Object.assign(deal(ctx), { open: null, round: 1, wins: {}, timer: PG.Timer.create(ctx.setting('timer')) }); },
     onSetting(ctx, key, val) {
       const t = ctx.session && ctx.session.timer;
@@ -33,6 +36,13 @@
       s.cells.forEach((c) => { if (c.owner && team(c.owner)) counts[c.owner] = (counts[c.owner] || 0) + 1; });
 
       const save = () => ctx.save();
+      /* سؤال جديد للحرف من المجالات المفعّلة فقط (وإن لم يوجد: من أي مجال) */
+      const pickQ = (l, avoid = []) => {
+        const list = qs(l), off = [];
+        list.forEach((q, i) => { if (ctx.setting('cat_' + catOf(q)) === false) off.push(i); });
+        const i = PG.bank.next(bankId(l), list.length, { avoid: avoid.concat(off) });
+        return i >= 0 ? i : PG.bank.next(bankId(l), list.length, { avoid });
+      };
       const redeal = (nextRound) => {
         Object.assign(s, deal(ctx), { open: null });
         if (nextRound) s.round++;
@@ -43,7 +53,7 @@
       function openCell(i, resumed) {
         const c = s.cells[i]; if (!c) return;
         const size = qs(c.l).length;
-        if (size && (c.q < 0 || c.q >= size)) c.q = PG.bank.next(bankId(c.l), size);
+        if (size && (c.q < 0 || c.q >= size)) c.q = pickQ(c.l);
         s.open = i;
         let revealed = false;
         const timer = new PG.Timer(s.timer, { compact: true, save });
@@ -56,7 +66,7 @@
 
         const change = () => {
           if (size < 2) return PG.ui.toast('لا يوجد سؤال آخر لهذا الحرف');
-          c.q = PG.bank.next(bankId(c.l), size, { avoid: [c.q] }); revealed = false;
+          c.q = pickQ(c.l, [c.q]); revealed = false;
           timer.reset(ctx.setting('timer')); if (ctx.setting('autoTimer')) timer.start();
           save(); PG.audio.play('flip'); draw();
         };
@@ -67,6 +77,7 @@
           const q = qs(c.l)[c.q], ow = c.owner && team(c.owner);
           m.setBody(h('div', { class: 'hx-q' },
             h('div', { class: 'hx-big', style: ow ? { '--fill': ow.color, '--fg': textOn(ow.color) } : null }, show(c.l)),
+            q ? h('span', { class: 'hx-cat' }, CATS[catOf(q)] || catOf(q)) : null,
             h('p', { class: 'hx-qtext' }, q ? q[0] : 'لا توجد أسئلة لهذا الحرف بعد.'),
             q ? h('div', { class: 'hx-ans' }, revealed
               ? h('div', null, h('small', { class: 'muted' }, 'الإجابة'), h('b', null, q[1]))
