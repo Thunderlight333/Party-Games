@@ -71,7 +71,7 @@
           save(); PG.audio.play('flip'); draw();
         };
         const assign = (id) => { c.owner = id; save(); PG.audio.play('correct'); m.close(); ctx.rerender(); };
-        const clear = () => { c.owner = null; save(); PG.audio.play('pop'); draw(); };
+        const clear = () => { c.owner = null; save(); PG.audio.play('pop'); m.close(); ctx.rerender(); };
 
         function draw() {
           const q = qs(c.l)[c.q], ow = c.owner && team(c.owner);
