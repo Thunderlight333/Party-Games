@@ -144,6 +144,7 @@ option { background: #151832; color: var(--text); }
 .modal-foot { display: flex; gap: 8px; justify-content: flex-start; padding: 12px 18px 16px; border-top: 1px solid var(--brd); }
 .confirm-msg { font-size: 1.02rem; }
 .danger-zone { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 16px; padding: 14px; border-radius: 14px; border: 1px solid rgba(244,63,94,.35); background: rgba(244,63,94,.07); }
+.danger-zone.soft { border-color: rgba(255,255,255,.14); background: rgba(255,255,255,.04); }
 
 /* تنبيهات */
 #toasts { position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
