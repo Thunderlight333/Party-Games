@@ -152,11 +152,17 @@
       PG.ui.field({ label: 'المؤثرات الصوتية', type: 'toggle' }, p.sound, (v) => { p.sound = v; S.save(); home(); }),
       PG.ui.field({ label: 'مستوى الصوت', type: 'range', min: 0, max: 1, step: 0.05 }, p.volume, (v) => { p.volume = v; S.save(); }),
       h('div', { class: 'row wrap' }, PG.ui.btn('تجربة الصوت', { icon: 'sound', cls: 'ghost', onClick: () => PG.audio.play('win') })),
+      h('div', { class: 'danger-zone soft' },
+        h('div', null, h('b', null, 'تصفير سجل الأسئلة'), h('p', { class: 'muted small' }, 'الأسئلة التي ظهرت سابقاً تعود للظهور من جديد. لا يمسّ الفرق ولا الإعدادات ولا بنك الأسئلة.')),
+        PG.ui.btn('تصفير', { icon: 'shuffle', cls: 'ghost', onClick: async () => {
+          if (!(await PG.ui.confirm('تصفير سجل الأسئلة المستخدمة في كل الألعاب؟', { ok: 'تصفير' }))) return;
+          S.state.banks = {}; S.save(); PG.ui.toast('تم تصفير سجل الأسئلة');
+        } })),
       h('div', { class: 'danger-zone' },
-        h('div', null, h('b', null, 'مسح كل البيانات'), h('p', { class: 'muted small' }, 'حذف الفرق والإعدادات والألعاب المحفوظة وسجل الأسئلة المستخدمة.')),
-        PG.ui.btn('مسح', { icon: 'trash', cls: 'danger', onClick: async () => {
-          if (!(await PG.ui.confirm('سيتم حذف كل البيانات المحفوظة على هذا الجهاز نهائياً. متابعة؟', { ok: 'مسح الكل', danger: true }))) return;
-          S.wipe(); m.close(); location.hash = '#/'; home(); PG.ui.toast('تم مسح البيانات');
+        h('div', null, h('b', null, 'إعادة ضبط الجهاز'), h('p', { class: 'muted small' }, 'حذف الفرق والإعدادات والألعاب المحفوظة وسجل الأسئلة من هذا الجهاز. بنك الأسئلة نفسه لا يُحذف.')),
+        PG.ui.btn('إعادة ضبط', { icon: 'trash', cls: 'danger', onClick: async () => {
+          if (!(await PG.ui.confirm('سيتم حذف كل البيانات المحفوظة على هذا الجهاز نهائياً. متابعة؟', { ok: 'إعادة ضبط', danger: true }))) return;
+          S.wipe(); m.close(); location.hash = '#/'; home(); PG.ui.toast('تمت إعادة الضبط');
         } })));
     const m = PG.ui.modal({ title: 'الإعدادات العامة', body, actions: [{ label: 'تم', cls: 'primary', icon: 'check' }] });
   }
