@@ -118,7 +118,7 @@
         board.append(row);
       }
 
-      root.append(
+      root.append(...[
         h('div', { class: 'hx-top glass' },
           h('div', { class: 'hx-counts' }, h('span', { class: 'muted' }, 'الجولة ' + s.round),
             teams.map((t) => h('span', { class: 'hx-chip', style: { '--tc': t.color } }, h('i'), t.name + ': ' + (counts[t.id] || 0)))),
@@ -130,7 +130,7 @@
         two ? h('p', { class: 'muted small hx-guide' }, `«${teams[0].name}» يصل بين الأعلى والأسفل، و«${teams[1].name}» بين اليمين واليسار.`) : null,
         h('div', { class: 'hx-wrap' }, board),
         h('h3', { class: 'hx-sub' }, 'الجولات الفائزة'),
-        PG.teams.scoreboard(s.wins, { onChange: (id, d) => { s.wins[id] = Math.max(0, (s.wins[id] || 0) + d); save(); ctx.rerender(); } }));
+        PG.teams.scoreboard(s.wins, { onChange: (id, d) => { s.wins[id] = Math.max(0, (s.wins[id] || 0) + d); save(); ctx.rerender(); } })].filter(Boolean));
 
       if (s.open != null && s.cells[s.open]) openCell(s.open, true);
     },
