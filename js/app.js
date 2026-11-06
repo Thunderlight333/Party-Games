@@ -26,32 +26,46 @@
       h('div', { class: 'gc-icon', html: PG.icon(g.icon) }),
       h('div', { class: 'gc-body' }, h('h3', null, g.title), h('p', null, g.desc)),
       h('div', { class: 'gc-tags' },
-        g.mode ? h('span', { class: 'tag' }, g.mode) : null,
-        !g.ready ? h('span', { class: 'tag soon' }, 'قريباً') : live ? h('span', { class: 'tag live' }, '● قيد اللعب') : null));
+        !g.ready ? h('span', { class: 'tag soon' }, 'قريباً') : live ? h('span', { class: 'tag live' }, '● قيد اللعب') : g.mode ? h('span', { class: 'tag' }, g.mode) : null));
   }
 
+  const TAB_NAMES = { teams: 'فرق', deduction: 'استنتاج', extra: 'إضافية', tools: 'أدوات' };
   function home() {
     const st = S.state, active = st.active && PG.games.get(st.active);
-    const node = h('section', { class: 'home' });
-    node.append(h('header', { class: 'hero' },
+    const cats = PG.games.CATEGORIES.filter((c) => PG.games.list.some((g) => g.category === c.id));
+    let tab = st.prefs.tab && (st.prefs.tab === 'all' || cats.some((c) => c.id === st.prefs.tab)) ? st.prefs.tab : 'all';
+    const node = h('section', { class: 'home' }), sentinel = h('div', { class: 'top-sentinel' });
+    const bar = h('header', { class: 'topbar' },
       h('div', { class: 'brand-mark', html: PG.icon('logo') }),
       h('div', { class: 'hero-text' }, h('h1', null, 'مجلس الألعاب'), h('p', { class: 'muted' }, 'ألعاب جماعية للجمعات والمجالس — تعمل بدون إنترنت')),
       h('div', { class: 'hero-actions' },
-        PG.ui.btn('الفرق', { icon: 'users', cls: 'ghost', onClick: () => PG.teams.openManager() }),
+        PG.ui.btn('', { icon: 'users', cls: 'icon ghost', title: 'الفرق', onClick: () => PG.teams.openManager() }),
         soundBtn(),
-        PG.ui.btn('', { icon: 'sliders', cls: 'icon ghost', title: 'الإعدادات', onClick: globalSettings }))));
+        PG.ui.btn('', { icon: 'sliders', cls: 'icon ghost', title: 'الإعدادات', onClick: globalSettings })));
+    node.append(sentinel, bar);
     if (active) node.append(h('div', { class: 'resume glass', style: { '--gc': active.color } },
       h('div', { class: 'resume-icon', html: PG.icon(active.icon) }),
-      h('div', { class: 'resume-text' }, h('small', null, 'لديك لعبة قيد اللعب'), h('b', null, active.title)),
+      h('div', { class: 'resume-text' }, h('small', null, 'لعبة قيد اللعب'), h('b', null, active.title)),
       h('div', { class: 'resume-actions' },
         PG.ui.btn('رجوع للعبة', { icon: 'play', cls: 'primary', onClick: () => go(active.id) }),
         PG.ui.btn('إنهاء', { icon: 'power', cls: 'ghost danger-text', onClick: () => endGame(active.id) }))));
-    PG.games.CATEGORIES.forEach((c) => {
-      const gs = PG.games.list.filter((g) => g.category === c.id);
-      if (gs.length) node.append(h('h2', { class: 'cat-title' }, c.title), h('div', { class: 'game-grid' }, gs.map(card)));
-    });
-    node.append(h('footer', { class: 'foot muted' }, 'كل شيء يُحفظ تلقائياً على هذا الجهاز.'));
+    const list = h('div', { class: 'home-list' });
+    const paint = () => {
+      list.innerHTML = '';
+      tabs.querySelectorAll('.tab').forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
+      if (tab === 'all') cats.forEach((c) => list.append(h('h2', { class: 'cat-title' }, c.title), h('div', { class: 'game-grid' }, PG.games.list.filter((g) => g.category === c.id).map(card))));
+      else list.append(h('div', { class: 'game-grid tab-grid' }, PG.games.list.filter((g) => g.category === tab).map(card)));
+    };
+    const tabBtn = (id, label, n) => h('button', { type: 'button', class: 'tab', dataset: { t: id }, onclick: () => { tab = id; st.prefs.tab = id; S.save(); PG.audio.play('click'); paint(); } }, label, n != null ? h('span', null, n) : null);
+    const tabs = h('nav', { class: 'tabs', 'aria-label': 'الأقسام' }, tabBtn('all', 'الكل'),
+      cats.map((c) => tabBtn(c.id, TAB_NAMES[c.id] || c.title, PG.games.list.filter((g) => g.category === c.id).length)));
+    node.append(tabs, list, h('footer', { class: 'foot muted' }, 'كل شيء يُحفظ تلقائياً على هذا الجهاز.'));
+    paint();
     setView(node);
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(([e]) => bar.classList.toggle('stuck', !e.isIntersecting));
+      io.observe(sentinel); viewCleanups.push(() => io.disconnect());
+    }
   }
 
   /* ---------- دورة حياة اللعبة ---------- */
@@ -129,12 +143,13 @@
 
   /* ---------- الإعدادات ---------- */
   function gameSettings(ctx) {
-    const g = ctx.def, body = h('div', { class: 'settings' });
+    const g = ctx.def, body = h('div', { class: 'settings' }), grp = h('div', { class: 'set-group' });
     let dirty = false, m;
-    (g.settings || []).forEach((f) => body.append(PG.ui.field(f, ctx.setting(f.key), (v) => {
+    (g.settings || []).forEach((f) => grp.append(PG.ui.field(f, ctx.setting(f.key), (v) => {
       S.setSetting(ctx.id, f.key, v); g.onSetting && ctx.session && g.onSetting(ctx, f.key, v); S.save(); dirty = true;
     })));
-    body.append(PG.ui.field({ label: 'المؤثرات الصوتية', type: 'toggle' }, S.state.prefs.sound, (v) => { S.state.prefs.sound = v; S.save(); }));
+    if (grp.children.length) body.append(h('div', { class: 'set-title' }, 'اللعبة'), grp);
+    body.append(h('div', { class: 'set-title' }, 'عام'), h('div', { class: 'set-group' }, PG.ui.field({ label: 'المؤثرات الصوتية', type: 'toggle' }, S.state.prefs.sound, (v) => { S.state.prefs.sound = v; S.save(); })));
     body.append(h('div', { class: 'danger-zone' },
       h('div', null, h('b', null, 'إعادة اللعب وتوزيع عشوائي'), h('p', { class: 'muted small' }, 'تصفير اللعبة الحالية وخلط كل العناصر عشوائياً.')),
       PG.ui.btn('إعادة وخلط', { icon: 'shuffle', cls: 'danger', onClick: async () => {
@@ -143,15 +158,18 @@
         g.reset ? g.reset(ctx) : (ctx.session = g.newSession(ctx));
         S.save(); dirty = false; m.close(); PG.audio.play('whoosh'); mountGame(ctx); PG.ui.toast('تمت إعادة اللعبة وخلطها');
       } })));
-    m = PG.ui.modal({ title: 'إعدادات: ' + g.title, body, actions: [{ label: 'تم', cls: 'primary', icon: 'check' }], onClose: () => { if (dirty) mountGame(ctx); } });
+    m = PG.ui.modal({ title: 'إعدادات ' + g.title, body, actions: [{ label: 'تم', cls: 'primary', icon: 'check' }], onClose: () => { if (dirty) mountGame(ctx); } });
   }
 
   function globalSettings() {
     const p = S.state.prefs;
     const body = h('div', { class: 'settings' },
-      PG.ui.field({ label: 'المؤثرات الصوتية', type: 'toggle' }, p.sound, (v) => { p.sound = v; S.save(); home(); }),
-      PG.ui.field({ label: 'مستوى الصوت', type: 'range', min: 0, max: 1, step: 0.05 }, p.volume, (v) => { p.volume = v; S.save(); }),
-      h('div', { class: 'row wrap' }, PG.ui.btn('تجربة الصوت', { icon: 'sound', cls: 'ghost', onClick: () => PG.audio.play('win') })),
+      h('div', { class: 'set-title' }, 'الصوت'),
+      h('div', { class: 'set-group' },
+        PG.ui.field({ label: 'المؤثرات الصوتية', type: 'toggle' }, p.sound, (v) => { p.sound = v; S.save(); home(); }),
+        PG.ui.field({ label: 'مستوى الصوت', type: 'range', min: 0, max: 1, step: 0.05 }, p.volume, (v) => { p.volume = v; S.save(); }),
+        h('div', { class: 'field' }, h('div', { class: 'field-label' }, h('span', null, 'تجربة الصوت')), PG.ui.btn('تشغيل', { icon: 'sound', cls: 'ghost sm', onClick: () => PG.audio.play('win') }))),
+      h('div', { class: 'set-title' }, 'البيانات'),
       h('div', { class: 'danger-zone soft' },
         h('div', null, h('b', null, 'تصفير سجل الأسئلة'), h('p', { class: 'muted small' }, 'الأسئلة التي ظهرت سابقاً تعود للظهور من جديد. لا يمسّ الفرق ولا الإعدادات ولا بنك الأسئلة.')),
         PG.ui.btn('تصفير', { icon: 'shuffle', cls: 'ghost', onClick: async () => {
