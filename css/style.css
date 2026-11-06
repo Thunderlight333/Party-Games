@@ -223,3 +223,46 @@ option { background: #151832; color: var(--text); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ===== عجلة الحظ ===== */
+.wh-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .wh-layout { grid-template-columns: minmax(0, 1fr); } }
+.wh-stage { display: grid; gap: 12px; justify-items: center; }
+.wh-wheel { position: relative; width: 100%; max-width: 620px; display: grid; justify-items: center; padding-top: 14px; }
+.wh-canvas { display: block; cursor: pointer; border-radius: 50%; box-shadow: 0 24px 60px -24px rgba(0,0,0,.8), 0 0 0 6px rgba(255,255,255,.06); touch-action: manipulation; }
+.wh-canvas:focus-visible { outline: 3px solid var(--warn); outline-offset: 4px; }
+.wh-pointer { position: absolute; top: 0; left: 50%; width: 34px; height: 44px; transform: translateX(-50%); transform-origin: 50% 8px; z-index: 2;
+  background: linear-gradient(180deg, #fff7d6, #f59e0b); clip-path: polygon(50% 100%, 0 0, 100% 0); filter: drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
+.wh-pointer.hit { animation: whHit .12s ease-out; }
+@keyframes whHit { 50% { transform: translateX(-50%) rotate(-14deg); } }
+.wh-spin { min-width: 200px; min-height: 54px; font-size: 1.2rem; }
+.wh-spinning .wh-spin { opacity: .5; pointer-events: none; }
+.wh-tip { margin: -4px 0 0; }
+.wh-side { display: grid; gap: 12px; min-width: 0; }
+.wh-ed { display: grid; gap: 10px; padding: 14px; min-width: 0; }
+.wh-edh { display: flex; justify-content: space-between; align-items: center; }
+.wh-lists { display: flex; gap: 6px; align-items: center; }
+.wh-lists select { flex: 1; min-width: 0; }
+.wh-lname { font-weight: 700; }
+.wh-add .input { flex: 1; min-width: 0; }
+.wh-rows { display: grid; gap: 6px; max-height: 46vh; overflow-y: auto; padding-inline-end: 2px; }
+.wh-row { display: flex; align-items: center; gap: 6px; }
+.wh-row.off { opacity: .45; }
+.wh-row.off .wh-name { text-decoration: line-through; }
+.wh-sw { position: relative; flex: none; width: 30px; height: 30px; border-radius: 9px; border: 2px solid rgba(255,255,255,.25); cursor: pointer; overflow: hidden; }
+.wh-sw input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.wh-name { flex: 1; min-width: 0; min-height: 38px; padding-block: 6px; }
+.wh-w { width: 76px; flex: none; min-height: 38px; padding-block: 4px; }
+.wh-tools, .wh-presets { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.wh-numrow { display: inline-flex; gap: 6px; align-items: center; }
+.wh-num { width: 70px; min-height: 34px; padding-block: 4px; }
+.wh-bulkbox { display: grid; gap: 8px; }
+.wh-bulk { width: 100%; resize: vertical; line-height: 1.7; }
+.wh-hist { padding: 10px 14px; display: grid; gap: 8px; }
+.wh-hist summary { cursor: pointer; font-weight: 600; }
+.wh-hl { display: flex; flex-wrap: wrap; gap: 6px; }
+.wh-hl .tag.gold { border-color: #eab308; color: #fde047; }
+.wh-winner { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 10px 0; }
+.wh-wname { font-size: clamp(2rem, 9vw, 3.2rem); font-weight: 800; color: var(--wt, #fff); background: var(--wc); padding: 10px 26px; border-radius: 20px; box-shadow: 0 18px 40px -16px var(--wc); max-width: 100%; overflow-wrap: anywhere; animation: whPop .45s var(--ease) both; }
+@keyframes whPop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.wh-confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
