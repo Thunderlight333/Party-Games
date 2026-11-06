@@ -42,7 +42,7 @@
   }
 
   PG.games.register({
-    id: 'wheel', title: 'عجلة الحظ', category: 'tools', icon: 'spark', color: '#f59e0b', mode: 'أداة',
+    id: 'wheel', title: 'عجلة الحظ', category: 'tools', icon: 'wheel', color: '#f59e0b', mode: 'أداة',
     desc: 'لفّ العجلة واختر عشوائياً: أسماء، عقوبات، مطاعم، أي شيء.', ready: true, teams: null,
     settings: [
       { key: 'dur', label: 'مدة الدوران (ثانية)', hint: 'كل ما زادت المدة زاد التشويق', type: 'number', min: 2, max: 20, step: 1, default: 6 },

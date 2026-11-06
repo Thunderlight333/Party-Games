@@ -7,7 +7,7 @@
   const BANK = 'bid';
 
   PG.games.register({
-    id: 'bid', title: 'المزايدة', category: 'teams', icon: 'trophy', color: '#14b8a6', mode: 'فرق',
+    id: 'bid', title: 'المزايدة', category: 'teams', icon: 'bid', color: '#14b8a6', mode: 'فرق',
     desc: 'سؤال تعداد: كم إجابة تقدر تقول؟ زايد على خصمك أو قل له «عدّدها».', ready: true,
     teams: { min: 2, recommended: 2 },
     settings: [

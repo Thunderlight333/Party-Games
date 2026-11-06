@@ -183,4 +183,9 @@
   S.load();
   addEventListener('hashchange', route);
   route();
+
+  /* العمل بدون إنترنت (PWA): يعمل فقط عند فتح الموقع من رابط http/https */
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch((e) => console.warn('SW', e)));
+  }
 })();

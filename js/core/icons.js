@@ -32,6 +32,8 @@
     outsider: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/><path d="M4 20L20 4"/>',
     crown: '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>',
     grid: '<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6" fill="currentColor"/>',
+    wheel: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.8"/><path d="M12 3v7.2M12 13.8V21M3 12h7.2M13.8 12H21M5.6 5.6l5.1 5.1M13.3 13.3l5.1 5.1M18.4 5.6l-5.1 5.1M10.7 13.3l-5.1 5.1"/>',
+    bid: '<path d="M7 20V10M12 20V6M17 20v-7"/><path d="M4 20h16"/><path d="M9.5 5.5L12 3l2.5 2.5"/>',
     taboo: '<path d="M4 5h16v11H9.5L4 20z"/><path d="M8.5 8.5l7 5M15.5 8.5l-7 5"/>',
     trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8 20h8"/>',
   };
