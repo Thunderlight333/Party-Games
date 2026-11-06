@@ -267,3 +267,40 @@ option { background: #151832; color: var(--text); }
 .hx-team { border-color: transparent; font-weight: 700; min-width: 110px; justify-content: center; }
 .hx-team.on { outline: 3px solid #fff; outline-offset: 2px; }
 @keyframes hxIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* ===== تحدي المئة ===== */
+.fd-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; margin-bottom: 10px; flex-wrap: wrap; }
+.fd-mult { padding: 2px 12px; border-radius: 999px; background: linear-gradient(135deg, var(--warn), #ef4444); font-weight: 800; }
+.fd-pool b { font-size: 1.3rem; color: var(--accent-2); font-variant-numeric: tabular-nums; }
+.fd-turn { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.fd-team { border-color: transparent; font-weight: 700; min-width: 100px; opacity: .55; }
+.fd-team.on { opacity: 1; outline: 3px solid #fff; outline-offset: 2px; }
+.fd-strikes { display: flex; gap: 6px; }
+.fd-strikes span { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px; border: 2px solid var(--brd-2); color: var(--brd-2); font-weight: 900; font-size: 1.2rem; }
+.fd-strikes span.on { border-color: var(--danger); color: #fff; background: var(--danger); animation: hxIn .3s var(--ease); }
+.fd-q { padding: 18px 20px; text-align: center; margin-bottom: 14px; border-top: 4px solid var(--tc); }
+.fd-q p { font-size: clamp(1.2rem, 3vw, 1.9rem); font-weight: 700; }
+.fd-board { display: grid; gap: 10px; max-width: 860px; margin: 0 auto 16px; }
+.fd-board.cols2 { grid-template-columns: repeat(2, 1fr); grid-auto-flow: column; grid-template-rows: repeat(var(--rows), auto); }
+.fd-card { height: 64px; padding: 0; border: 0; background: none; cursor: pointer; perspective: 800px; font: inherit; color: var(--text); }
+.fd-in { position: relative; width: 100%; height: 100%; transition: transform .55s var(--ease); transform-style: preserve-3d; }
+.fd-card.open .fd-in { transform: rotateX(180deg); }
+.fd-front, .fd-back { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 14px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 0 16px; gap: 10px; }
+.fd-front { justify-content: center; background: linear-gradient(160deg, #2b2f5e, #161a36); border: 1px solid var(--brd-2); }
+.fd-n { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: linear-gradient(135deg, var(--accent), #6366f1); }
+.fd-peek { position: absolute; inset-inline-start: 12px; font-size: .78rem; color: var(--muted); opacity: .55; }
+.fd-back { transform: rotateX(180deg); justify-content: space-between; background: linear-gradient(135deg, #0e7490, #1e3a8a); border: 1px solid rgba(34,211,238,.5); font-weight: 700; font-size: 1.15rem; }
+.fd-back b { min-width: 46px; text-align: center; padding: 4px 8px; border-radius: 10px; background: rgba(0,0,0,.3); font-variant-numeric: tabular-nums; }
+.fd-card:hover .fd-front { filter: brightness(1.2); }
+.fd-tools { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+.fd-ctrl { justify-content: center; }
+.fd-ctrl .btn.danger { min-width: 140px; font-size: 1.1rem; }
+.fd-steal { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 14px 18px; }
+.fd-bigx { position: fixed; inset: 0; z-index: 400; display: grid; place-items: center; font-size: clamp(5rem, 18vw, 12rem); pointer-events: none; animation: fdX 1.1s var(--ease) forwards; }
+@keyframes fdX { 0% { opacity: 0; transform: scale(2); } 20% { opacity: 1; transform: scale(1); } 75% { opacity: 1; } 100% { opacity: 0; transform: scale(.9); } }
+@media (max-width: 640px) {
+  .fd-board.cols2 { grid-template-columns: 1fr; grid-auto-flow: row; grid-template-rows: none; }
+  .fd-card { height: 54px; }
+  .fd-strikes span { width: 32px; height: 32px; }
+}
+.fd-teams { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.fd-sub { text-align: center; margin-bottom: 10px; font-size: 1.05rem; color: var(--muted); }
