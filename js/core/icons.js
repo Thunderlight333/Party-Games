@@ -37,6 +37,7 @@
     wheel: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.8"/><path d="M12 3v7.2M12 13.8V21M3 12h7.2M13.8 12H21M5.6 5.6l5.1 5.1M13.3 13.3l5.1 5.1M18.4 5.6l-5.1 5.1M10.7 13.3l-5.1 5.1"/>',
     bid: '<path d="M7 20V10M12 20V6M17 20v-7"/><path d="M4 20h16"/><path d="M9.5 5.5L12 3l2.5 2.5"/>',
     taboo: '<path d="M4 5h16v11H9.5L4 20z"/><path d="M8.5 8.5l7 5M15.5 8.5l-7 5"/>',
+    quiz: '<rect x="3" y="3" width="8" height="8" rx="1.8"/><rect x="13" y="3" width="8" height="8" rx="1.8"/><rect x="3" y="13" width="8" height="8" rx="1.8"/><path d="M15.2 15.6a1.9 1.9 0 1 1 2.6 1.8c-.5.2-.8.6-.8 1.1v.3"/><circle cx="17" cy="20.6" r=".4" fill="currentColor"/>',
     trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8 20h8"/>',
   };
   window.PG.icon = (name, cls) =>

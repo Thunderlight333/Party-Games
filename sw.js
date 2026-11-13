@@ -1,7 +1,7 @@
 /* Service Worker: يخزّن الموقع كاملاً للعمل بدون إنترنت.
    مع الإنترنت: يجيب أحدث نسخة ويحدّث المخزن. بدون إنترنت: يشغّل من المخزن.
    هذا الملف مولّد من tools/sw.template.js بالأمر: node tools/build-sw.js */
-const VERSION = 'f79fcb30db';
+const VERSION = '3f8af1cfce';
 const CACHE = 'majlis-' + VERSION;
 const FILES = [
   "./",
@@ -37,6 +37,7 @@ const FILES = [
   "js/data/outsider-2.js",
   "js/data/outsider.js",
   "js/data/taboo.js",
+  "js/data/trivia.js",
   "js/games/bid.js",
   "js/games/catalog.js",
   "js/games/codenames.js",
@@ -46,6 +47,7 @@ const FILES = [
   "js/games/huroof.js",
   "js/games/outsider.js",
   "js/games/taboo.js",
+  "js/games/trivia.js",
   "js/games/wheel.js",
   "icons/apple-touch-icon.png",
   "icons/icon-192.png",
