@@ -62,7 +62,7 @@ node tools/build-sw.js   # يحدّث قائمة الملفات ورقم الن�
 | `js/app.js` | التوجيه `#/` و `#/game/<id>`، الاستئناف، الإنهاء، الإعدادات، تسجيل Service Worker. يُحمَّل أخيراً |
 | `sw.js`، `manifest.webmanifest`، `icons/` | العمل بدون إنترنت والتثبيت كتطبيق |
 | `tools/` | سكربتات المراجعة (`*-export.js` تولّد ملفات في `docs/`) و`build-sw.js` |
-| `docs/` | `progress.md`، `rules.html` و`party-games-rules.pdf`، وملفات مراجعة البيانات |
+| `docs/` | `progress.md` و`rules.md`، وملفات مراجعة البيانات |
 
 ### شكل الحالة
 ```

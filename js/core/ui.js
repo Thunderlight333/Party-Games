@@ -89,26 +89,53 @@
 
   /* حقل إعداد: f = {key,label,type:'number'|'toggle'|'select'|'range'|'text',min,max,step,options,hint} */
   ui.field = (f, val, onChange) => {
-    let ctl;
+    let ctl, stack = false, tap = null;
     if (f.type === 'toggle') {
-      ctl = h('button', { type: 'button', class: 'switch' + (val ? ' on' : ''), role: 'switch', 'aria-checked': String(!!val),
-        onclick: () => { val = !val; ctl.classList.toggle('on', val); ctl.setAttribute('aria-checked', String(val)); PG.audio.play('click'); onChange(val); } }, h('span'));
+      ctl = h('button', { type: 'button', class: 'switch' + (val ? ' on' : ''), role: 'switch', 'aria-checked': String(!!val), 'aria-label': f.label,
+        onclick: (e) => { e.stopPropagation(); val = !val; ctl.classList.toggle('on', val); ctl.setAttribute('aria-checked', String(val)); PG.audio.play('click'); onChange(val); } }, h('span'));
+      tap = () => ctl.click();
     } else if (f.type === 'number') {
       const step = f.step || 1;
       const set = (v) => { v = clamp(isNaN(v) ? f.default : v, f.min ?? -Infinity, f.max ?? Infinity); inp.value = v; onChange(v); };
-      const inp = h('input', { type: 'number', inputmode: 'numeric', class: 'input num', min: f.min, max: f.max, step, value: val, onchange: () => set(+inp.value) });
+      const inp = h('input', { type: 'number', inputmode: 'numeric', class: 'input num', min: f.min, max: f.max, step, value: val, 'aria-label': f.label, onchange: () => set(+inp.value) });
       ctl = h('div', { class: 'stepper' },
         h('button', { type: 'button', class: 'btn icon sm', 'aria-label': 'زيادة', html: PG.icon('plus'), onclick: () => set(+inp.value + step) }),
         inp,
         h('button', { type: 'button', class: 'btn icon sm', 'aria-label': 'إنقاص', html: PG.icon('minus'), onclick: () => set(+inp.value - step) }));
     } else if (f.type === 'select') {
-      ctl = h('select', { class: 'input', onchange: (e) => onChange(e.target.value) },
-        f.options.map((o) => h('option', { value: o.value, selected: String(o.value) === String(val) }, o.label)));
+      const opts = f.options || [];
+      const seg = opts.length <= 4 && opts.reduce((n, o) => n + String(o.label).length, 0) <= 30;
+      if (seg) {
+        stack = opts.length > 2 || opts.some((o) => String(o.label).length > 8);
+        ctl = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': f.label }, opts.map((o) => {
+          const on = String(o.value) === String(val);
+          return h('button', { type: 'button', class: 'seg-btn' + (on ? ' on' : ''), role: 'radio', 'aria-checked': String(on), onclick: (e) => {
+            const b = e.currentTarget; if (b.classList.contains('on')) return;
+            ctl.querySelectorAll('.seg-btn').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', String(x === b)); });
+            PG.audio.play('click'); onChange(String(o.value));
+          } }, o.label);
+        }));
+      } else {
+        ctl = h('select', { class: 'input', 'aria-label': f.label, onchange: (e) => onChange(e.target.value) },
+          opts.map((o) => h('option', { value: o.value, selected: String(o.value) === String(val) }, o.label)));
+      }
     } else if (f.type === 'range') {
-      ctl = h('input', { type: 'range', class: 'range', min: f.min, max: f.max, step: f.step || 1, value: val, oninput: (e) => onChange(+e.target.value) });
+      const fmt = (v) => (f.max <= 1 ? Math.round(v * 100) + '%' : String(v));
+      const out = h('output', { class: 'range-val' }, fmt(val));
+      ctl = h('div', { class: 'range-wrap' },
+        h('input', { type: 'range', class: 'range', min: f.min, max: f.max, step: f.step || 1, value: val, 'aria-label': f.label, oninput: (e) => { out.textContent = fmt(+e.target.value); onChange(+e.target.value); } }), out);
     } else {
-      ctl = h('input', { class: 'input', value: val ?? '', onchange: (e) => onChange(e.target.value) });
+      stack = true;
+      ctl = h('input', { class: 'input', value: val ?? '', 'aria-label': f.label, placeholder: f.placeholder || null, onchange: (e) => onChange(e.target.value) });
     }
-    return h('div', { class: 'field' }, h('div', { class: 'field-label' }, h('span', null, f.label), f.hint ? h('small', { class: 'muted' }, f.hint) : null), ctl);
+    const row = h('div', { class: 'field' + (stack ? ' stack' : '') + (tap ? ' tap' : '') },
+      h('div', { class: 'field-label' }, h('span', null, f.label), f.hint ? h('small', { class: 'muted' }, f.hint) : null), ctl);
+    if (tap) row.addEventListener('click', tap);
+    return row;
   };
+
+  /* صف إعداد بزر (للإجراءات مثل التصفير) */
+  ui.actionRow = (label, hint, button, danger) =>
+    h('div', { class: 'field' + (danger ? ' danger-row' : '') },
+      h('div', { class: 'field-label' }, h('span', null, label), hint ? h('small', { class: 'muted' }, hint) : null), button);
 })();

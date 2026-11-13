@@ -1,7 +1,7 @@
 /* Service Worker: يخزّن الموقع كاملاً للعمل بدون إنترنت.
    مع الإنترنت: يجيب أحدث نسخة ويحدّث المخزن. بدون إنترنت: يشغّل من المخزن.
    هذا الملف مولّد من tools/sw.template.js بالأمر: node tools/build-sw.js */
-const VERSION = '4226b1290c';
+const VERSION = '75806691da';
 const CACHE = 'majlis-' + VERSION;
 const FILES = [
   "./",
@@ -22,11 +22,15 @@ const FILES = [
   "js/data/codenames.js",
   "js/data/feud.js",
   "js/data/huroof-1.js",
+  "js/data/huroof-10.js",
   "js/data/huroof-2.js",
   "js/data/huroof-3.js",
   "js/data/huroof-4.js",
   "js/data/huroof-5.js",
   "js/data/huroof-6.js",
+  "js/data/huroof-7.js",
+  "js/data/huroof-8.js",
+  "js/data/huroof-9.js",
   "js/data/huroof.js",
   "js/data/outsider.js",
   "js/data/taboo.js",

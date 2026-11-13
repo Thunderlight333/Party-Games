@@ -18,6 +18,7 @@
       { key: 'outs', label: 'عدد اللي برا السالفة', hint: 'اثنين يحتاج 6 لاعبين على الأقل، ويُطبَّق من الجولة الجاية', type: 'select', default: '1',
         options: [{ value: '1', label: 'واحد' }, { value: '2', label: 'اثنين' }] },
       { key: 'knowCat', label: 'اللي برا السالفة يعرف التصنيف', hint: 'عند التشغيل يشوف تصنيف الكلمة (مثلاً: أكلات) بدون الكلمة نفسها', type: 'toggle', default: true },
+      { key: 'knowEach', label: 'اللي برا السالفة يعرفون بعض', hint: 'لما يكونون اثنين: كل واحد يشوف اسم زميله في شاشة دوره', type: 'toggle', default: true },
       { key: 'vote', label: 'طريقة التصويت', hint: 'جماعي: تتناقشون وتختارون المتهم. سري: كل لاعب يصوّت على الجهاز بدون ما أحد يشوف', type: 'select', default: 'group',
         options: [{ value: 'group', label: 'جماعي' }, { value: 'secret', label: 'سري (تمرير الجهاز)' }] },
       { key: 'useTimer', label: 'مؤقت لكل سؤال', hint: 'يظهر في مرحلة الأسئلة ويرجع من البداية مع كل سؤال', type: 'toggle', default: false },
@@ -70,7 +71,9 @@
       /* بطاقة الدور السرية */
       const roleCard = (id) => isOut(id)
         ? h('div', { class: 'os-role out' }, h('div', { class: 'os-ico', html: PG.icon('outsider') }), h('h2', null, 'أنت برا السالفة'),
-          ctx.setting('knowCat') ? h('p', { class: 'os-cat' }, 'التصنيف: ', h('b', null, s.cat)) : h('p', { class: 'muted' }, 'حاول تعرف الكلمة من أسئلتهم بدون ما تنكشف'))
+          ctx.setting('knowCat') ? h('p', { class: 'os-cat' }, 'التصنيف: ', h('b', null, s.cat)) : h('p', { class: 'muted' }, 'حاول تعرف الكلمة من أسئلتهم بدون ما تنكشف'),
+          s.outs.length > 1 && ctx.setting('knowEach') ? h('p', { class: 'os-mate' }, 'زميلك برا السالفة: ',
+            h('b', null, s.outs.filter((o) => o !== id).map((o) => P(o).name).join(' و '))) : null)
         : h('div', { class: 'os-role in' }, h('p', { class: 'os-cat' }, 'التصنيف: ', h('b', null, s.cat)), h('h2', { class: 'os-word' }, s.word),
           h('p', { class: 'muted small' }, 'لا تقول الكلمة! اسأل وجاوب بذكاء'));
 
