@@ -4,16 +4,23 @@
   ],
   "buy_button_template": "templates/buy_button.png",
   "confirm_button_template": "templates/confirm_button.png",
+  "close_button_template": "templates/close_button.png",
   "shop_region": null,
   "match_threshold": 0.85,
 
-  "open_shop_key": "e",
-  "close_shop_key": "e",
-  "shop_open_delay": 1.2,
+  "equip_key": "1",
+  "open_click_position": null,
+  "unequip_after": true,
+  "shop_open_delay": 1.5,
   "click_delay": 0.35,
 
-  "check_interval_seconds": 60,
-  "max_purchases_per_item": 1,
+  "spawn_minutes": [0, 30],
+  "stay_minutes": 10,
+  "wait_after_spawn_seconds": 15,
+  "retry_every_seconds": 45,
+  "clock_offset_seconds": 0,
+
+  "max_purchases_per_spawn": 1,
   "anti_afk": true,
 
   "discord_webhook_url": "",

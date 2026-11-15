@@ -1,7 +1,7 @@
 """
 Calibration helper for the GPO shop macro.
 
-Run this with Roblox open and the shop/merchant window visible:
+Run this with Roblox open while the merchant is up:
 
     python calibrate.py
 
@@ -73,11 +73,23 @@ def main():
     listener = keyboard.Listener(on_press=_on_press)
     listener.start()
 
-    print("=== GPO shop macro calibration ===")
-    print("Open the shop/merchant in Roblox first. Keep Roblox windowed or borderless")
+    print("=== GPO merchant macro calibration ===")
+    print("Do this while the merchant is up. Keep Roblox windowed or borderless")
     print("and DON'T move or resize it after calibrating.\n")
 
-    cfg["shop_region"] = pick_box("Whole shop window (the area that lists items)")
+    key = input(f"Which hotbar key equips the shop item? [{cfg.get('equip_key', '1')}] ").strip()
+    if key:
+        cfg["equip_key"] = key
+
+    ans = input("\nIs clicking the CENTER of the screen fine to open the list? [Y/n] ")
+    if ans.strip().lower() == "n":
+        print("\n[Spot to click after equipping]")
+        cfg["open_click_position"] = list(wait_for_point("the spot to click"))
+    else:
+        cfg["open_click_position"] = None
+
+    input("\nNow equip the item and click so the shop list is open, then press Enter here... ")
+    cfg["shop_region"] = pick_box("Whole shop list (the area that shows the items)")
 
     for item in cfg["items"]:
         ans = input(f"\nCapture icon for '{item['name']}' now? It must be visible in the shop. [y/N] ")
@@ -91,6 +103,10 @@ def main():
     ans = input("\nCapture the CONFIRM button? (skip if the game buys without confirming) [y/N] ")
     if ans.strip().lower() == "y":
         save_template(pick_box("Confirm button"), cfg["confirm_button_template"])
+
+    ans = input("\nCapture the CLOSE (X) button of the list? (skip if unequipping closes it) [y/N] ")
+    if ans.strip().lower() == "y":
+        save_template(pick_box("Close button"), cfg["close_button_template"])
 
     with open(CONFIG_PATH, "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2)
