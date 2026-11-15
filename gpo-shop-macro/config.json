@@ -1,0 +1,21 @@
+{
+  "items": [
+    {"name": "Mythical Chest", "template": "templates/item_mythical_chest.png", "buy": true}
+  ],
+  "buy_button_template": "templates/buy_button.png",
+  "confirm_button_template": "templates/confirm_button.png",
+  "shop_region": null,
+  "match_threshold": 0.85,
+
+  "open_shop_key": "e",
+  "close_shop_key": "e",
+  "shop_open_delay": 1.2,
+  "click_delay": 0.35,
+
+  "check_interval_seconds": 60,
+  "max_purchases_per_item": 1,
+  "anti_afk": true,
+
+  "discord_webhook_url": "",
+  "screenshot_on_find": true
+}
