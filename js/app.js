@@ -20,9 +20,9 @@
     paint(); return b;
   }
 
-  function card(g) {
+  function card(g, i) {
     const live = S.state.active === g.id;
-    return h('button', { type: 'button', class: `game-card glass${g.ready ? '' : ' soon'}${live ? ' is-active' : ''}`, style: { '--gc': g.color }, onclick: () => openGame(g.id) },
+    return h('button', { type: 'button', class: `game-card glass${g.ready ? '' : ' soon'}${live ? ' is-active' : ''}`, style: { '--gc': g.color, '--i': i || 0 }, onclick: () => openGame(g.id) },
       h('div', { class: 'gc-icon', html: PG.icon(g.icon) }),
       h('div', { class: 'gc-body' }, h('h3', null, g.title), h('p', null, g.desc)),
       h('div', { class: 'gc-foot' },
@@ -139,7 +139,15 @@
       return;
     }
     if (!ctx.session) { ctx.session = g.newSession(ctx); S.save(); }
-    try { g.mount(root, ctx); }
+    try {
+      g.mount(root, ctx);
+      /* حركة دخول خفيفة عند تغيّر مرحلة اللعبة فقط (وليس مع كل ضغطة) */
+      const ph = ctx.session && ctx.session.phase;
+      if (ph !== root.dataset.ph) {
+        const first = root.dataset.ph === undefined; root.dataset.ph = ph;
+        if (!first) [...root.children].forEach((el, i) => { el.classList.add('ph-in'); el.style.setProperty('--k', Math.min(i, 3)); });
+      }
+    }
     catch (e) {
       console.error(e);
       root.innerHTML = '';

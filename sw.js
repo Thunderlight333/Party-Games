@@ -1,7 +1,7 @@
 /* Service Worker: يخزّن الموقع كاملاً للعمل بدون إنترنت.
    مع الإنترنت: يجيب أحدث نسخة ويحدّث المخزن. بدون إنترنت: يشغّل من المخزن.
    هذا الملف مولّد من tools/sw.template.js بالأمر: node tools/build-sw.js */
-const VERSION = '6e6576d6be';
+const VERSION = '9fc969ea9c';
 const CACHE = 'majlis-' + VERSION;
 const FILES = [
   "./",
@@ -18,14 +18,18 @@ const FILES = [
   "js/core/timer.js",
   "js/core/ui.js",
   "js/core/utils.js",
+  "js/data/bid-2.js",
   "js/data/bid.js",
   "js/data/codenames-2.js",
+  "js/data/codenames-3.js",
   "js/data/codenames.js",
   "js/data/feud-2.js",
+  "js/data/feud-3.js",
   "js/data/feud.js",
   "js/data/huroof-1.js",
   "js/data/huroof-10.js",
   "js/data/huroof-11.js",
+  "js/data/huroof-12.js",
   "js/data/huroof-2.js",
   "js/data/huroof-3.js",
   "js/data/huroof-4.js",
@@ -36,8 +40,11 @@ const FILES = [
   "js/data/huroof-9.js",
   "js/data/huroof.js",
   "js/data/outsider-2.js",
+  "js/data/outsider-3.js",
   "js/data/outsider.js",
+  "js/data/taboo-2.js",
   "js/data/taboo.js",
+  "js/data/trivia-2.js",
   "js/data/trivia.js",
   "js/games/bid.js",
   "js/games/catalog.js",
@@ -46,6 +53,7 @@ const FILES = [
   "js/games/emperor.js",
   "js/games/feud.js",
   "js/games/huroof.js",
+  "js/games/mafia.js",
   "js/games/outsider.js",
   "js/games/taboo.js",
   "js/games/trivia.js",
