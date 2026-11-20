@@ -1,7 +1,7 @@
 /* Service Worker: يخزّن الموقع كاملاً للعمل بدون إنترنت.
    مع الإنترنت: يجيب أحدث نسخة ويحدّث المخزن. بدون إنترنت: يشغّل من المخزن.
    هذا الملف مولّد من tools/sw.template.js بالأمر: node tools/build-sw.js */
-const VERSION = '4234c363cb';
+const VERSION = 'faa4188164';
 const CACHE = 'majlis-' + VERSION;
 const FILES = [
   "./",
